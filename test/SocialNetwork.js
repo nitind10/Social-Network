@@ -68,8 +68,28 @@ contract('SocialNetwork', ([deployer, author, tipper]) => {
     		result = await socialNetwork.createPost('Post1 issa vibe', {from: author })
    			postCount = await socialNetwork.postCount()
 
-   			//SUCCESS
+   			//SUCCESS (post count increment verification)
    			assert.equal(postCount,1)
+
+   			//post data/content verification
+
+   			/*explanation
+   			first we log out the result, that contains info of event
+   			that'll allow us to verify data from the posts 
+   			for this we type only console.log(result) (not the next 5 lines)
+   			and run test. we can see structure of result on terminal inspect it and
+   			see info which we wanna pull out of result (bcoz of this we could write the code lines)
+   			logs: will contain our created event
+   			after const event = result.logs[0].args if we type console.log(event) and run
+   			we can see data of event, after that we use assertions*/
+   			const event = result.logs[0].args
+   			assert.equal(event.id.toNumber(),postCount.toNumber(),'id is correct')
+   			assert.equal(event.content, 'Post1 issa vibe', 'content is correct')
+   			assert.equal(event.tipAmount,'0', 'tip ammount is correct')
+   			assert.equal(event.author, author, 'author is correct')
+
+   			//FAILURE: post must have content
+   			await socialNetwork.createPost('', {from: author }).should.be.rejected;
     	})//it ends
 
 

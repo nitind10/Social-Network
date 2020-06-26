@@ -19,6 +19,13 @@ contract SocialNetwork {
 		address author;//author of the post, will obviously be an ethereum account holder
 	}
 
+	event PostCreated(
+		uint id,
+		string content,
+		uint tipAmount,
+		address author
+		);
+
     constructor() public {
 		name = "Nitin's Social Network";
 	}
@@ -33,10 +40,24 @@ contract SocialNetwork {
         mapping is a key-value store that writes information to the blockchain itself
         it kindof gonna help us treat the smart contract as a database with the blockchain */
 
+
+        //Require valid content
+    	/*require() fn in solidity: if require(true); then remaing following
+    	code will execute but if require(false) the remaing fn code (in which require() is present)
+    	will not execute and gas required to call the fn in which require turns out
+    	to be false, will be refunded back to the caller */
+    	require(bytes(_content).length > 0);
+        
+
         //putting created post in the mapping
 
+        //incrementing post count
         postCount++;
+        //create the posts
         posts[postCount] = Post(postCount, _content, 0, msg.sender);
+
+        //trigger Event (bacially to verify post data)
+        emit PostCreated(postCount, _content, 0, msg.sender);
          
     }
 
