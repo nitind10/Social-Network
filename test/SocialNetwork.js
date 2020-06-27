@@ -19,10 +19,11 @@ callback fuction has a variable which contains all the accounts
 provided to us by ganache, i.e it'll be an array. we can use 
 these accounts as examples inside the tests
 */
-                          //we created array of 3 different possible accounts i.e deployer of contract, author of post, tipper of post
+
+//we created array of 3 different possible accounts i.e deployer of contract, author of post, tipper of post
 contract('SocialNetwork', ([deployer, author, tipper]) => {
 
-	//SocialNetwork is here a variable that represents the deployed contract
+	//socialNetwork is here a variable that represents the deployed contract
 	let socialNetwork //notice s is lowercase, so diffrent to SocialNetwork
 
     //used this fn so that we dont have to use the inside statement again and again
@@ -36,6 +37,7 @@ contract('SocialNetwork', ([deployer, author, tipper]) => {
 	hence the asyn await pattern. we didnt have to use it in console because there it works natively
 	*/
 	describe('deployment', async () => {
+
 		it('deploys successfully', async () => {
 			//socialNetwork = await SocialNetwork.deployed() //removed after adding before() fn
 			const address = await socialNetwork.address
@@ -50,6 +52,7 @@ contract('SocialNetwork', ([deployer, author, tipper]) => {
 			const name = await socialNetwork.name()
             assert.equal(name,'Nitin\'s Social Network')
 		})//end of it
+
 	})//end of describe()
 
 	/*we want our smart contract to 
@@ -61,13 +64,16 @@ contract('SocialNetwork', ([deployer, author, tipper]) => {
     describe('posts', async () => {
     	let result, postCount
 
-    	it('create posts', async () => {
-            /*we have passed the content but we also need msg.sender in solidity
+    	before(async () => {
+    		/*we have passed the content but swe also need msg.sender in solidity
             i.e who is the author, for this we need function metadata since we are working with javascript
             we pass function metadata after the regular agruments */
     		result = await socialNetwork.createPost('Post1 issa vibe', {from: author })
    			postCount = await socialNetwork.postCount()
+    	})
 
+    	it('create posts', async () => {
+            
    			//SUCCESS (post count increment verification)
    			assert.equal(postCount,1)
 
@@ -93,14 +99,52 @@ contract('SocialNetwork', ([deployer, author, tipper]) => {
     	})//it ends
 
 
-    	// it('lists posts', async () => {
+    	it('lists posts', async () => {
+    		/*here we are fetching a particular post, we can check
+    		all posts when building client side application using loop
+    		we cant do it here because in solidity we cant know how big
+    		the mapping is and cant iterate over it*/
+    		const post = await socialNetwork.posts(postCount)
+    		assert.equal(post.id.toNumber(),postCount.toNumber(),'id is correct')
+   			assert.equal(post.content, 'Post1 issa vibe', 'content is correct')
+   			assert.equal(post.tipAmount,'0', 'tip ammount is correct')
+   			assert.equal(post.author, author, 'author is correct')
+    	})//it ends
 
-    	// })//it ends
 
+    	it('allows users to tip posts', async () => {                      
+    		
+    		//track the author balance before getting tipped
+   			let oldAuthorBalance
+   			oldAuthorBalance = await web3.eth.getBalance(author) //retrieving balance
+   			oldAuthorBalance = new web3.utils.BN(oldAuthorBalance) //converting it to big number
 
-    	// it('allows users to tip posts', async () => {
+   																				  //helps to convert ether to wei, library already installed
+    		result = await socialNetwork.tipPost(postCount, {from: tipper, value: web3.utils.toWei('1', 'Ether')} )
+    		//SUCCESSs
+    		const event = result.logs[0].args
+   			assert.equal(event.id.toNumber(),postCount.toNumber(),'id is correct')
+   			assert.equal(event.content, 'Post1 issa vibe', 'content is correct')
+   			assert.equal(event.tipAmount,'1000000000000000000', 'tip ammount is correct')
+   			assert.equal(event.author, author, 'author is correct')
 
-    	// })//it ends
+   			//check that the author recieved funds
+   			let newAuthorBalance
+   			newAuthorBalance = await web3.eth.getBalance(author) //retrieving balance
+   			newAuthorBalance = new web3.utils.BN(newAuthorBalance) //converting it to big number
+
+   			let tipAmount
+   			tipAmount = web3.utils.toWei('1', 'Ether')
+   			tipAmount = new web3.utils.BN(tipAmount)
+
+   			const expectedBalance = oldAuthorBalance.add(tipAmount)
+
+   			assert.equal(newAuthorBalance.toString(), expectedBalance.toString()) //converted to string for comparison
+
+   			//FAILURE: tries to tip a post that doesn't exist
+			await socialNetwork.tipPost(99, {from: tipper, value: web3.utils.toWei('1', 'Ether')}).should.be.rejected; 
+			  			
+    	})//it ends
 
     })//end of describe
 

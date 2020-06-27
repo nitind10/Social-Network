@@ -1,6 +1,7 @@
 pragma solidity ^0.5.0;
 
 contract SocialNetwork {
+
 	//here name is state variable i.e it will exist on blockchain
 	string public name;
 	uint public postCount = 0;
@@ -16,14 +17,20 @@ contract SocialNetwork {
 		uint id;//unique id of a post in the database
 		string content;//for storing value of _content
 		uint tipAmount;//amount of tip someone can give(updatable)
-		address author;//author of the post, will obviously be an ethereum account holder
+		address payable author;//author of the post, will obviously be an ethereum account holder
 	}
 
 	event PostCreated(
 		uint id,
 		string content,
 		uint tipAmount,
-		address author
+		address payable author
+		);
+	event PostTipped(
+		uint id,
+		string content,
+		uint tipAmount,
+		address payable author
 		);
 
     constructor() public {
@@ -39,7 +46,6 @@ contract SocialNetwork {
         with the help of mappings
         mapping is a key-value store that writes information to the blockchain itself
         it kindof gonna help us treat the smart contract as a database with the blockchain */
-
 
         //Require valid content
     	/*require() fn in solidity: if require(true); then remaing following
@@ -59,6 +65,25 @@ contract SocialNetwork {
         //trigger Event (bacially to verify post data)
         emit PostCreated(postCount, _content, 0, msg.sender);
          
+    }
+
+    function tipPost(uint _id) public payable { //public like other because we want to call it from tests and client side too 
+    	//make sure id is valid
+    	require(_id > 0 && _id <= postCount);
+
+    	//1. fetch the posts  					 // payable will allow sender to send ether
+    	//creating copy of post, so that it wont affect the post on blockchain, untill we reassing it later
+    	Post memory _post = posts[_id];
+    	//2. fetch the author
+    	address payable _author = _post.author;
+    	//3. pay the author by sending ether
+    	address(_author).transfer(msg.value); //msg.value is amount in wei, 1ether = 10^18 wei
+    	//4. increment tip amount
+    	_post.tipAmount = _post.tipAmount + msg.value; //msg.value gives the amount of ether sent-in
+    	//5. update the post on blockchain
+    	posts[_id] = _post;
+    	//6. trigger an event
+    	emit PostTipped(postCount, _post.content, _post.tipAmount, _author);
     }
 
     
