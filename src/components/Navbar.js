@@ -2,8 +2,6 @@
 as component in app.js was getting bigger, so we 
 created a different component to put the code of Navbar */
 
-/*props is property*/
-
 import React, { Component } from 'react';
 import Identicon from 'identicon.js';
 
@@ -23,7 +21,7 @@ class Navbar extends Component {
               <ul className="navbar-nav px-3">
                <li className="nav-item text-nowrap d-none d-sm-none d-sm-block">
                 <small className="text-secondary">
-                 <small id="account"> {this.props.account}</small>        
+                 <small id="account"> {this.props.account}</small>  {/*props is property */ }
                 </small>
                 { this.props.account
                   ? <img 
