@@ -1,6 +1,6 @@
 /*react components can render other react comopnents
 as component in app.js was getting bigger, so we 
-created a different component to put the code of Navbar*/
+created a different component to put the code of Navbar */
 
 /*props is property*/
 
