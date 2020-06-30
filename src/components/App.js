@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import Web3 from 'web3'; //to connect this app.js with blockchain
-import logo from '../logo.png';
+import Identicon from 'identicon.js';
 import './App.css';
 import SocialNetwork from '../abis/SocialNetwork.json'
 import Navbar from './Navbar'
+import Main from './Main'
 
 /* This is a react component, react is a javascript component based library
 which allows us write js in these reusable components
@@ -92,12 +93,23 @@ class App extends Component {
         })
       }
       //console.log({posts: this.state.posts}) //will list post in console
-
+      this.setState({loading: false})
     } else {
       window.alert('SocialNetwork contract not deployed to detected network.')//will get this popup error if we change network from metamask
     }
+  }
 
-    
+  createPost(content) {
+    this.setState({ loading: true})
+    //calling createPost of smart contract using web3          //the account whose going to create post, sign the transaction with metamask and put it on blockchain
+    this.state.socialNetwork.methods.createPost(content).send({ from: this.state.account })
+    .once('receipt', (receipt) => {
+      this.setState({ loading: false})
+    })
+    //to stop manual loading of browser after signing transaction
+    .on('confirmation', function(confirmationNumber, receipt){
+      window.location.reload();
+    })
   }
 
   //using state of component
@@ -107,8 +119,11 @@ class App extends Component {
       account: '' ,
       socialNetwork: null ,
       postCount: 0,
-      posts: []
+      posts: [],
+      loading: true //will show app is loading if we are waiting for information from the blockchain
     }
+    //helps to bind, so we ca access it in main.js 's form
+    this.createPost = this.createPost.bind(this)
   }
 
 
@@ -116,41 +131,13 @@ class App extends Component {
     return (
       <div>
         <Navbar account={this.state.account}/>  {/*rendering the Navbar component, passing the state component as, without passing it wont be accesible to Navbar.js*/}
-        <div className="container-fluid mt-5">
-          <div className="row">
-            <main role="main" className="col-lg-12 ml-auto mr-auto" style={{ maxWidth: '500px'}}>
-              <div className="content mr-auto ml-auto">
-               {/*Looping through all posts*/} 
-               {/*key is index, we need this to tell react that
-               each element it renders out to the page is unique*/}
-               { this.state.posts.map((post, key) => {
-                  return(
-                    <div className="card mb-4" key={key} >
-                     <div className="card-header">
-                       <small className="text-muted">{post.author}</small>
-                     </div>
-                     <ul id="postList" className="list-group list-group-flush">
-                       <li className="list-group-item">
-                         <p>{post.content}</p>
-                       </li>
-                       <li key={key} className="list-group-item py-2">
-                         <small className="float-left mt-1 text-muted">
-                           TIPS: {window.web3.utils.fromWei(post.tipAmount.toString(), 'Ether')} ETH
-                         </small>
-                         <button className="btn btn-link btn-sm float-right pt-0">
-                           <span>
-                             TIP 0.1 ETH
-                           </span>
-                         </button>
-                       </li>
-                     </ul>
-                    </div>
-                  )
-               })}
-              </div>
-            </main>
-          </div>
-        </div>
+        { this.state.loading
+          ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
+          : <Main
+              posts={this.state.posts}
+              createPost={this.createPost}
+            />
+        }
       </div>
     );
   }
