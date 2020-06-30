@@ -81,7 +81,7 @@ class App extends Component {
       but send methods cost gas, they write data to the chain, so we need to sign this transactions using account*/
       const postCount = await socialNetwork.methods.postCount().call()
       this.setState({postCount: postCount})
-      console.log(postCount)
+      //console.log(postCount)
       /*we need this post count so that we can loop through posts to list them*/
       //LOAD POSTS
       for(var i = 1; i<=postCount; ++i) {
@@ -93,6 +93,11 @@ class App extends Component {
         })
       }
       //console.log({posts: this.state.posts}) //will list post in console
+
+      //sorting posts. show highest tipped posts first
+      this.setState({
+        posts: this.state.posts.sort( (a,b) => b.tipAmount - a.tipAmount )
+      })
       this.setState({loading: false})
     } else {
       window.alert('SocialNetwork contract not deployed to detected network.')//will get this popup error if we change network from metamask
@@ -112,6 +117,18 @@ class App extends Component {
     })
   }
 
+  tipPost(id, tipAmount) {
+    this.setState({ loading: true})
+    this.state.socialNetwork.methods.tipPost(id).send({ from: this.state.account, value: tipAmount })
+    .once('receipt', (receipt) => {
+      this.setState({ loading: false})
+    })
+
+    .on('confirmation', function(confirmationNumber, receipt){
+      window.location.reload();
+    })
+  }
+
   //using state of component
   constructor(props) {
     super(props)
@@ -124,6 +141,7 @@ class App extends Component {
     }
     //helps to bind, so we ca access it in main.js 's form
     this.createPost = this.createPost.bind(this)
+    this.tipPost = this.tipPost.bind(this)
   }
 
 
@@ -136,6 +154,7 @@ class App extends Component {
           : <Main
               posts={this.state.posts}
               createPost={this.createPost}
+              tipPost={this.tipPost}
             />
         }
       </div>
