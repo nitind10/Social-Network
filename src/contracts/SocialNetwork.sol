@@ -76,6 +76,8 @@ contract SocialNetwork {
     	Post memory _post = posts[_id];
     	//2. fetch the author
     	address payable _author = _post.author;
+        if(_author==msg.sender)
+            revert();
     	//3. pay the author by sending ether
     	address(_author).transfer(msg.value); //msg.value is amount in wei, 1ether = 10^18 wei
     	//4. increment tip amount
