@@ -5,6 +5,7 @@ import './App.css';
 import SocialNetwork from '../abis/SocialNetwork.json'
 import Navbar from './Navbar'
 import Main from './Main'
+import {Jumbotron, Button} from 'react-bootstrap';
 
 /* This is a react component, react is a javascript component based library
 which allows us write js in these reusable components
@@ -148,6 +149,20 @@ class App extends Component {
   render() {
     return (
       <div>
+        <div className="jumbotron">
+          <Jumbotron>
+            <h1>Welcome to a Decentralized Social Network!</h1>
+            <br></br>
+            <p>
+              With the help of our DeCent Network you can create value adding content for users, who can inturn tip your posts with cryptocurrency.</p>
+            <p>So what are you waiting for, go ahead and create your first post.</p>
+            <p>
+            <br></br>
+              <Button variant=" btn-outline-dark btn-lg">Learn more</Button>
+            </p>
+          </Jumbotron>
+        </div>
+
         <Navbar account={this.state.account}/>  {/*rendering the Navbar component, passing the state component as, without passing it wont be accesible to Navbar.js*/}
         { this.state.loading
           ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>
