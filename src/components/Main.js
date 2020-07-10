@@ -26,7 +26,7 @@ class Main extends Component {
               <div className="card-body">
                 <img class="card-img-top" src="https://images.unsplash.com/photo-1434030216411-0b793f4b4173?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60" alt="Card image cap"></img>
                 <p>&nbsp;</p>
-                <form onSubmit={(event) => {
+                <form autocomplete = "off" onSubmit={(event) => {
                   event.preventDefault()        
                   const content = this.postContent.value
                   this.props.createPost(content)
