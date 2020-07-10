@@ -149,21 +149,19 @@ class App extends Component {
   render() {
     return (
       <div>
-        
-          
             <Jumbotron>
-              <h1>Welcome to a Decentralized Social Network!</h1>
+              <h1>Decentralized Social Network</h1>
               <br></br>
               <p className="jcontent">
-                With our DeCent network you can create value adding content for our users, who can inturn tip your posts with cryptocurrency.</p>
-              <p className="jcontent">So what are you waiting for, go ahead and create your first post.</p>
-              
-              <br></br>
-                <Button variant=" learn-more btn-dark btn-md">Learn more</Button>
-              
+                Welcome to our DeCent network where you can create value adding content for our users, who can inturn tip your content with cryptocurrency.
+                <br></br>Also, feel free to reward the posts you find useful.
+                <br></br><br></br>
+              </p>
+              <a href="https://decrypt.co/16935/why-decentralization-is-the-future-for-social-media">
+                <Button variant=" learn-more btn-outline-info btn-md">Learn more</Button>
+              </a>
             </Jumbotron>
           
-
         <Navbar account={this.state.account}/>  {/*rendering the Navbar component, passing the state component as, without passing it wont be accesible to Navbar.js*/}
         { this.state.loading
           ? <div id="loader" className="text-center mt-5"><p>Loading...</p></div>

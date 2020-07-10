@@ -63,8 +63,7 @@ contract SocialNetwork {
         posts[postCount] = Post(postCount, _content, 0, msg.sender);
 
         //trigger Event (bacially to verify post data)
-        emit PostCreated(postCount, _content, 0, msg.sender);
-         
+        emit PostCreated(postCount, _content, 0, msg.sender); 
     }
 
     function tipPost(uint _id) public payable { //public like other because we want to call it from tests and client side too 
@@ -86,7 +85,5 @@ contract SocialNetwork {
     	posts[_id] = _post;
     	//6. trigger an event
     	emit PostTipped(postCount, _post.content, _post.tipAmount, _author);
-    }
-
-    
+    }  
 }

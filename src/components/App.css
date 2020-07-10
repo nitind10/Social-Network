@@ -1,72 +1,49 @@
 /* Styles go here */
-#shareSection{
-	/*background-color: pink;*/
-}
-#postsSection{
-	/*background-color: yellow;*/
 
-}
 #shareSectionCard{
-	/*width: 80%;*/
-	/*margin: auto;*/
 	position: sticky;
 	top: 5.0rem;
 	background: transparent;
 	border: none;
-	/*background: url(https://images.unsplash.com/photo-1508780709619-79562169bc64?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=500&q=60);*/
 }
-.card-title{
-	color: white;
-}
+
 .card-img-top{
 	height: 250px ;
 }
+
 #author{
-	font-weight: lighter;
+	font-weight: 500;
 }
+
+#account{
+	color: white;
+	font-size: 0.75rem;
+}
+
 .tips{
-	font-weight: bolder;
-	color: rgb(40, 249, 63);
-	font-size: 0.8rem;
+	font-size: 0.9rem;
 }
+
 .posted-Content{
 	font-family: 'PT Sans Narrow', sans-serif;
+	font-size: 1.3rem;
 }
-#postsSectionCard{
 
-	/*background-color: rgba(30,30,30,.8);*/
-	/*background-color: rgba(228,234,245,.8);*/
-	color: black;
+#postsSectionCard{
 	border: none;
 }
-.list-group-item{
-	/*background-color: rgba(30,30,30,0);*/
-	/*background-color: rgba(228,234,245,0);*/
-}
+
 #postsSectionCard{
 	width: 90% ;
 	margin: auto;
 }
-.btn-block{
-	padding: none;
-}
-body{
-	
-	/*background-image: url(../imgs/img1.jpg);*/
-	background-size: cover;
-	/*background-repeat: no-repeat;*/
-}
 
 .jumbotron{
 	text-align: center;
-	
-	/*background: transparent;*/
-	
-	/*background-repeat: no-repeat;*/
 	background-image: url(../imgs/img1.jpg); 
-	/*background-size: 1200px 800px;*/
 	background-size: cover;
 }
+
 h4{
 	text-align: center;
 }
@@ -74,24 +51,30 @@ h4{
 h1{
 	text-transform: uppercase;
 	color: black;
-	font-family: 'Noto Sans HK', sans-serif;
+	font-family: 'Roboto', sans-serif;
 	font-size: 2.5em;
+	letter-spacing: 0.2rem;
 }
+
 .jcontent{
 	font-family: 'Raleway', sans-serif;
-	font-size: 1.25rem;
+	font-size: 1.32rem;
 	color: black;
-	
+	font-weight: 700;
 }
+
 .learn-more{
 	text-transform: uppercase;
 	color: black;
 	font-family: 'Noto Sans HK', sans-serif;
-	color: white;
+	
 }
+
 .gridHeading{
-	font-family: 'Raleway', sans-serif;
+	font-family: 'Bebas Neue', cursive;
 	text-transform: uppercase;
 	color: black;
-	font-weight: bold;
+	font-weight: bolder;
+	letter-spacing: 0.7rem;
+	font-size: 1.8rem;
 }
