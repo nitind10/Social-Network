@@ -1,5 +1,10 @@
 /* Styles go here */
 
+.navbar-brand{
+	font-family: 'Lobster', cursive;
+	font-size: 1.4rem;
+}
+
 #shareSectionCard{
 	position: sticky;
 	top: 5.0rem;
@@ -67,7 +72,6 @@ h1{
 	text-transform: uppercase;
 	color: black;
 	font-family: 'Noto Sans HK', sans-serif;
-	
 }
 
 .gridHeading{
