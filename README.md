@@ -1,2 +1,2 @@
 # Social-Network
-Social Network using Blockchain
+A DeCentralized Social Network using Ethereum Blockchain.
